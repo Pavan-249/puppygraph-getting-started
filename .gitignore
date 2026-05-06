@@ -1,0 +1,5 @@
+puppygraph_output/
+.ipynb_checkpoints/
+__pycache__/
+*.duckdb
+*.parquet

@@ -1,0 +1,91 @@
+{
+  "catalogs": [
+    {
+      "name": "healthcare",
+      "type": "duckdb",
+      "jdbc": {
+        "url": "jdbc:duckdb:",
+        "driverClass": "org.duckdb.DuckDBDriver"
+      },
+      "views": [
+        {
+          "name": "patients",
+          "sql": "SELECT * FROM read_parquet('/data/patients.parquet')"
+        },
+        {
+          "name": "conditions",
+          "sql": "SELECT * FROM read_parquet('/data/conditions.parquet')"
+        },
+        {
+          "name": "observations",
+          "sql": "SELECT * FROM read_parquet('/data/observations.parquet')"
+        }
+      ]
+    }
+  ],
+  "graph": {
+    "vertices": [
+      {
+        "label": "Patient",
+        "mappings": [
+          {
+            "catalog": "healthcare",
+            "view": "patients",
+            "id": "patient_id",
+            "properties": ["patient_id", "gender", "birth_year", "age"]
+          }
+        ]
+      },
+      {
+        "label": "Condition",
+        "mappings": [
+          {
+            "catalog": "healthcare",
+            "view": "conditions",
+            "id": "condition_code",
+            "properties": ["condition_code", "condition_display", "recorded_date", "clinical_status"]
+          }
+        ]
+      },
+      {
+        "label": "Observation",
+        "mappings": [
+          {
+            "catalog": "healthcare",
+            "view": "observations",
+            "id": "observation_code",
+            "properties": ["observation_code", "observation_display", "value_type", "effective_date", "value_numeric", "value_text"]
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "label": "HAS_CONDITION",
+        "from": "Patient",
+        "to": "Condition",
+        "mappings": [
+          {
+            "catalog": "healthcare",
+            "view": "conditions",
+            "fromId": "patient_id",
+            "toId": "condition_code"
+          }
+        ]
+      },
+      {
+        "label": "HAS_OBSERVATION",
+        "from": "Patient",
+        "to": "Observation",
+        "mappings": [
+          {
+            "catalog": "healthcare",
+            "view": "observations",
+            "fromId": "patient_id",
+            "toId": "observation_code"
+          }
+        ]
+      }
+    ]
+  }
+}
