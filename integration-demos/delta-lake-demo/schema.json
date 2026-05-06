@@ -1,0 +1,172 @@
+{
+  "catalogs": [
+    {
+      "name": "demo",
+      "type": "deltalake",
+      "metastore": {
+        "type": "unity",
+        "host": "http://unitycatalog:8080",
+        "databricksCatalogName": "puppygraph"
+      },
+      "storage": {
+        "type": "FromMetaStore"
+      }
+    }
+  ],
+  "graph": {
+    "vertices": [
+      {
+        "label": "person",
+        "oneToOne": {
+          "tableSource": {
+            "catalog": "demo",
+            "schema": "modern",
+            "table": "person"
+          },
+          "id": {
+            "fields": [
+              {
+                "type": "STRING",
+                "field": "id",
+                "alias": "id"
+              }
+            ]
+          },
+          "attributes": [
+            {
+              "type": "STRING",
+              "field": "name",
+              "alias": "name"
+            },
+            {
+              "type": "INT",
+              "field": "age",
+              "alias": "age"
+            }
+          ]
+        }
+      },
+      {
+        "label": "software",
+        "oneToOne": {
+          "tableSource": {
+            "catalog": "demo",
+            "schema": "modern",
+            "table": "software"
+          },
+          "id": {
+            "fields": [
+              {
+                "type": "STRING",
+                "field": "id",
+                "alias": "id"
+              }
+            ]
+          },
+          "attributes": [
+            {
+              "type": "STRING",
+              "field": "name",
+              "alias": "name"
+            },
+            {
+              "type": "STRING",
+              "field": "lang",
+              "alias": "lang"
+            }
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "label": "created",
+        "fromVertex": "person",
+        "toVertex": "software",
+        "tableSource": {
+          "catalog": "demo",
+          "schema": "modern",
+          "table": "created"
+        },
+        "id": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "id",
+              "alias": "id"
+            }
+          ]
+        },
+        "fromId": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "from_id",
+              "alias": "from_id"
+            }
+          ]
+        },
+        "toId": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "to_id",
+              "alias": "to_id"
+            }
+          ]
+        },
+        "attributes": [
+          {
+            "type": "DOUBLE",
+            "field": "weight",
+            "alias": "weight"
+          }
+        ]
+      },
+      {
+        "label": "knows",
+        "fromVertex": "person",
+        "toVertex": "person",
+        "tableSource": {
+          "catalog": "demo",
+          "schema": "modern",
+          "table": "knows"
+        },
+        "id": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "id",
+              "alias": "id"
+            }
+          ]
+        },
+        "fromId": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "from_id",
+              "alias": "from_id"
+            }
+          ]
+        },
+        "toId": {
+          "fields": [
+            {
+              "type": "STRING",
+              "field": "to_id",
+              "alias": "to_id"
+            }
+          ]
+        },
+        "attributes": [
+          {
+            "type": "DOUBLE",
+            "field": "weight",
+            "alias": "weight"
+          }
+        ]
+      }
+    ]
+  }
+}

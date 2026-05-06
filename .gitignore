@@ -1,5 +1,9 @@
-puppygraph_output/
-.ipynb_checkpoints/
-__pycache__/
+.idea
+.DS_Store
+*/.DS_Store
 *.duckdb
-*.parquet
+.venv/
+**/__pycache__/
+.ipynb_checkpoints/
+**/puppygraph_output/
+**/synthea/output/
